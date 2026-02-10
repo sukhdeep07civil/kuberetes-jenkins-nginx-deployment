@@ -60,10 +60,12 @@ pipeline {
 
         stage('Deploy to kubernetes'){
             steps{
-                bat """
-                kubectl apply -f k8s/deployment.yaml
-                kubectl apply -f k8s/service.yaml
-                """
+                withCredentials([file(credentialsId:'kubeconfig', variable: 'KUBECONFIG')]){
+                    bat """
+                    kubectl apply -f k8s/deployment.yaml
+                    kubectl apply -f k8s/service.yaml
+                    """
+                }
             }
         }
     }
